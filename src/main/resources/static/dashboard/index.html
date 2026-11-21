@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dispatch Control Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="sign">
+    <div class="sign__title">
+        <h1>Dispatch Control Room</h1>
+        <p>Every order on the map, every truck on its route. Built on the Dispatch Load Balancer API.</p>
+    </div>
+    <nav class="sign__actions" aria-label="Scenario actions">
+        <button type="button" class="btn btn--light" data-action="sample">Load Delhi sample</button>
+        <label class="scenario">
+            <span class="visually-hidden">City for random scenario</span>
+            <select id="city">
+                <option value="blr">Bengaluru</option>
+                <option value="mum">Mumbai</option>
+                <option value="del">Delhi NCR</option>
+                <option value="che">Chennai</option>
+            </select>
+        </label>
+        <button type="button" class="btn btn--light" data-action="random">Random scenario</button>
+        <button type="button" class="btn btn--ghost" data-action="reset">Clear all</button>
+        <a class="btn btn--ghost" href="/swagger-ui/index.html">API docs</a>
+    </nav>
+</header>
+
+<main class="room">
+    <aside class="panel" aria-label="Dispatch plan">
+        <section class="gauges" aria-label="Plan summary">
+            <div class="gauge">
+                <span class="gauge__value" id="kpi-assigned">0/0</span>
+                <span class="gauge__label">orders dispatched</span>
+            </div>
+            <div class="gauge">
+                <span class="gauge__value" id="kpi-distance">0 km</span>
+                <span class="gauge__label">total driving</span>
+            </div>
+            <div class="gauge">
+                <span class="gauge__value" id="kpi-util">0%</span>
+                <span class="gauge__label">fleet capacity used</span>
+            </div>
+            <div class="gauge gauge--warn" id="kpi-left-wrap">
+                <span class="gauge__value" id="kpi-left">0 kg</span>
+                <span class="gauge__label">left at the depot</span>
+            </div>
+        </section>
+
+        <section class="versus" aria-labelledby="versus-heading" id="versus" hidden>
+            <h2 id="versus-heading">Smart vs naive dispatch</h2>
+            <p class="versus__headline" id="versus-headline"></p>
+            <p class="hint">Same orders, same trucks. Naive takes orders first come, first served and gives them to trucks in turn.</p>
+            <dl class="versus__bars">
+                <div class="bar-row bar-row--smart">
+                    <dt>Smart</dt>
+                    <dd><span class="bar"><span class="bar__fill" id="bar-smart"></span></span><span id="val-smart"></span></dd>
+                </div>
+                <div class="bar-row bar-row--naive">
+                    <dt>Naive</dt>
+                    <dd><span class="bar"><span class="bar__fill" id="bar-naive"></span></span><span id="val-naive"></span></dd>
+                </div>
+            </dl>
+            <p class="versus__high" id="versus-high"></p>
+            <div class="toggle" role="radiogroup" aria-label="Plan shown on the map">
+                <label><input type="radio" name="view" value="smart" checked><span>Show smart plan</span></label>
+                <label><input type="radio" name="view" value="naive"><span>Show naive plan</span></label>
+            </div>
+        </section>
+
+        <section aria-labelledby="fleet-heading">
+            <h2 id="fleet-heading">Fleet</h2>
+            <p class="hint" id="fleet-hint">Click a truck to follow its route.</p>
+            <ol class="fleet" id="fleet"></ol>
+        </section>
+
+        <section aria-labelledby="left-heading" id="left-section" hidden>
+            <h2 id="left-heading">Could not be dispatched</h2>
+            <ul class="leftover" id="leftover"></ul>
+        </section>
+    </aside>
+
+    <section class="map-wrap" aria-label="Map">
+        <div id="map" role="application" aria-label="Map of vehicles, orders and routes"></div>
+
+        <form class="dropper" id="dropper" aria-label="Add to the map">
+            <fieldset class="dropper__mode">
+                <legend>Click the map to add</legend>
+                <label><input type="radio" name="mode" value="order" checked> an order</label>
+                <label><input type="radio" name="mode" value="vehicle"> a truck</label>
+            </fieldset>
+            <div class="dropper__fields" data-for="order">
+                <label>Weight <input type="number" id="drop-weight" min="1" step="1" value="20"> kg</label>
+                <label>Priority
+                    <select id="drop-priority">
+                        <option>HIGH</option>
+                        <option selected>MEDIUM</option>
+                        <option>LOW</option>
+                    </select>
+                </label>
+            </div>
+            <div class="dropper__fields" data-for="vehicle" hidden>
+                <label>Capacity <input type="number" id="drop-capacity" min="1" step="1" value="100"> kg</label>
+            </div>
+        </form>
+
+        <div class="legend" aria-hidden="true">
+            <span><i class="dot dot--HIGH"></i>High</span>
+            <span><i class="dot dot--MEDIUM"></i>Medium</span>
+            <span><i class="dot dot--LOW"></i>Low</span>
+            <span><i class="dot dot--left"></i>Not dispatched</span>
+            <span><i class="shield-mini"></i>Truck start</span>
+        </div>
+
+        <div class="empty" id="empty">
+            <h2>No orders yet</h2>
+            <p>Load the Delhi sample, generate a random city scenario, or click the map to drop your first order.</p>
+        </div>
+    </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

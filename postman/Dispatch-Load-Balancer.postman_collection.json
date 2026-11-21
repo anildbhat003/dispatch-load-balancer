@@ -1,0 +1,582 @@
+{
+  "info": {
+    "name": "Dispatch Load Balancer",
+    "description": "Set the baseUrl variable to your deployed URL (default http://localhost:8080). Run 'Reset' first, then a scenario folder top to bottom.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Reset",
+      "item": [
+        {
+          "name": "Delete all orders",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Delete all vehicles",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Spec example (Bangalore / Chennai)",
+      "item": [
+        {
+          "name": "Submit vehicles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicles\": [\n    {\n      \"vehicleId\": \"VEH001\",\n      \"capacity\": 100,\n      \"currentLatitude\": 12.9716,\n      \"currentLongitude\": 77.6413,\n      \"currentAddress\": \"Indiranagar, Bangalore, Karnataka, India\"\n    },\n    {\n      \"vehicleId\": \"VEH002\",\n      \"capacity\": 150,\n      \"currentLatitude\": 13.0674,\n      \"currentLongitude\": 80.2376,\n      \"currentAddress\": \"T Nagar, Chennai, Tamil Nadu, India\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Submit orders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"ORD001\",\n      \"latitude\": 12.9716,\n      \"longitude\": 77.5946,\n      \"address\": \"MG Road, Bangalore, Karnataka, India\",\n      \"packageWeight\": 10,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD002\",\n      \"latitude\": 13.0827,\n      \"longitude\": 80.2707,\n      \"address\": \"Anna Salai, Chennai, Tamil Nadu, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"MEDIUM\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get dispatch plan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/plan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "plan"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Sample data (30 Delhi NCR orders, 5 vehicles)",
+      "item": [
+        {
+          "name": "Submit 5 vehicles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicles\": [\n    {\n      \"vehicleId\": \"VEH001\",\n      \"capacity\": 100,\n      \"currentLatitude\": 28.7041,\n      \"currentLongitude\": 77.1025,\n      \"currentAddress\": \"Karol Bagh, Delhi, India\"\n    },\n    {\n      \"vehicleId\": \"VEH002\",\n      \"capacity\": 80,\n      \"currentLatitude\": 28.5355,\n      \"currentLongitude\": 77.391,\n      \"currentAddress\": \"Sector 18, Noida, Uttar Pradesh, India\"\n    },\n    {\n      \"vehicleId\": \"VEH003\",\n      \"capacity\": 120,\n      \"currentLatitude\": 28.4595,\n      \"currentLongitude\": 77.0266,\n      \"currentAddress\": \"Cyber Hub, Gurgaon, Haryana, India\"\n    },\n    {\n      \"vehicleId\": \"VEH004\",\n      \"capacity\": 90,\n      \"currentLatitude\": 28.6139,\n      \"currentLongitude\": 77.209,\n      \"currentAddress\": \"Connaught Place, Delhi, India\"\n    },\n    {\n      \"vehicleId\": \"VEH005\",\n      \"capacity\": 110,\n      \"currentLatitude\": 28.7041,\n      \"currentLongitude\": 77.1025,\n      \"currentAddress\": \"Karol Bagh, Delhi, India\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Submit 30 orders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"ORD001\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD002\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 10,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD003\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD004\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 25,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD005\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD006\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 40,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD007\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD008\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 25,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD009\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD010\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD011\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD012\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 10,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD013\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 25,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD014\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD015\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD016\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD017\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD018\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 10,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD019\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD020\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD021\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 25,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD022\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD023\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD024\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD025\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD026\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 25,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD027\",\n      \"latitude\": 28.5355,\n      \"longitude\": 77.391,\n      \"address\": \"Sector 18, Noida, Uttar Pradesh, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"MEDIUM\"\n    },\n    {\n      \"orderId\": \"ORD028\",\n      \"latitude\": 28.4595,\n      \"longitude\": 77.0266,\n      \"address\": \"Cyber Hub, Gurgaon, Haryana, India\",\n      \"packageWeight\": 15,\n      \"priority\": \"LOW\"\n    },\n    {\n      \"orderId\": \"ORD029\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 30,\n      \"priority\": \"HIGH\"\n    },\n    {\n      \"orderId\": \"ORD030\",\n      \"latitude\": 28.7041,\n      \"longitude\": 77.1025,\n      \"address\": \"Karol Bagh, Delhi, India\",\n      \"packageWeight\": 20,\n      \"priority\": \"LOW\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get dispatch plan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/plan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "plan"
+              ]
+            },
+            "description": "645 kg of orders vs 500 kg capacity: every HIGH and MEDIUM order is assigned; leftover LOW orders appear in unassignedOrders."
+          }
+        },
+        {
+          "name": "Compare smart vs naive",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/plan/comparison",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "plan",
+                "comparison"
+              ]
+            },
+            "description": "Smart drives ~80% less per delivery and dispatches all 12 HIGH orders (naive: 9/12)."
+          }
+        },
+        {
+          "name": "Naive baseline plan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/plan?strategy=naive",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "plan"
+              ],
+              "query": [
+                {
+                  "key": "strategy",
+                  "value": "naive"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "List orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "List vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Error handling",
+      "item": [
+        {
+          "name": "Invalid coordinates and weight",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"BAD1\",\n      \"latitude\": 95,\n      \"longitude\": 200,\n      \"address\": \"Nowhere\",\n      \"packageWeight\": -5,\n      \"priority\": \"HIGH\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Unknown priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"BAD2\",\n      \"latitude\": 12.97,\n      \"longitude\": 77.59,\n      \"address\": \"MG Road\",\n      \"packageWeight\": 5,\n      \"priority\": \"URGENT\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Missing fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Empty list",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Duplicate vehicle IDs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicles\": [\n    {\n      \"vehicleId\": \"VEH001\",\n      \"capacity\": 100,\n      \"currentLatitude\": 12.9716,\n      \"currentLongitude\": 77.6413,\n      \"currentAddress\": \"Indiranagar, Bangalore, Karnataka, India\"\n    },\n    {\n      \"vehicleId\": \"VEH001\",\n      \"capacity\": 100,\n      \"currentLatitude\": 12.9716,\n      \"currentLongitude\": 77.6413,\n      \"currentAddress\": \"Indiranagar, Bangalore, Karnataka, India\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Zero capacity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "vehicles"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicles\": [\n    {\n      \"vehicleId\": \"VEH001\",\n      \"capacity\": 0,\n      \"currentLatitude\": 12.9716,\n      \"currentLongitude\": 77.6413,\n      \"currentAddress\": \"Indiranagar, Bangalore, Karnataka, India\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Overweight order (unassignable)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "orders"
+              ]
+            },
+            "description": "Accepted, but GET /plan lists it in unassignedOrders: exceeds the largest vehicle capacity.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\n    {\n      \"orderId\": \"HEAVY1\",\n      \"latitude\": 28.6139,\n      \"longitude\": 77.209,\n      \"address\": \"Connaught Place, Delhi, India\",\n      \"packageWeight\": 500,\n      \"priority\": \"HIGH\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Unknown strategy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dispatch/plan?strategy=magic",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dispatch",
+                "plan"
+              ],
+              "query": [
+                {
+                  "key": "strategy",
+                  "value": "magic"
+                }
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
